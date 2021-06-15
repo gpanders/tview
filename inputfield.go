@@ -54,6 +54,18 @@ type InputField struct {
 	// The text color of the placeholder.
 	placeholderTextColor tcell.Color
 
+	// The text color of the autocomplete list
+	autocompleteTextColor tcell.Color
+
+	// The background color of the autocomplete list
+	autocompleteBackgroundColor tcell.Color
+
+	// The text color of the selected item in the autocomplete list
+	autocompleteSelectedTextColor tcell.Color
+
+	// The background color of the selected item in the autocomplete list
+	autocompleteSelectedBackgroundColor tcell.Color
+
 	// The screen width of the label area. A value of 0 means use the width of
 	// the label text.
 	labelWidth int
@@ -101,11 +113,15 @@ type InputField struct {
 // NewInputField returns a new input field.
 func NewInputField() *InputField {
 	return &InputField{
-		Box:                  NewBox(),
-		labelColor:           Styles.SecondaryTextColor,
-		fieldBackgroundColor: Styles.ContrastBackgroundColor,
-		fieldTextColor:       Styles.PrimaryTextColor,
-		placeholderTextColor: Styles.ContrastSecondaryTextColor,
+		Box:                                 NewBox(),
+		labelColor:                          Styles.SecondaryTextColor,
+		fieldBackgroundColor:                Styles.ContrastBackgroundColor,
+		fieldTextColor:                      Styles.PrimaryTextColor,
+		placeholderTextColor:                Styles.ContrastSecondaryTextColor,
+		autocompleteTextColor:               Styles.PrimitiveBackgroundColor,
+		autocompleteBackgroundColor:         Styles.MoreContrastBackgroundColor,
+		autocompleteSelectedTextColor:       Styles.PrimitiveBackgroundColor,
+		autocompleteSelectedBackgroundColor: Styles.PrimaryTextColor,
 	}
 }
 
@@ -169,6 +185,33 @@ func (i *InputField) SetFieldTextColor(color tcell.Color) *InputField {
 // SetPlaceholderTextColor sets the text color of placeholder text.
 func (i *InputField) SetPlaceholderTextColor(color tcell.Color) *InputField {
 	i.placeholderTextColor = color
+	return i
+}
+
+// SetAutocompleteTextColor sets the text color of the autocomplete list.
+func (i *InputField) SetAutocompleteTextColor(color tcell.Color) *InputField {
+	i.autocompleteTextColor = color
+	return i
+}
+
+// SetAutocompleteBackgroundColor sets the background color of the autocomplete
+// list.
+func (i *InputField) SetAutocompleteBackgroundColor(color tcell.Color) *InputField {
+	i.autocompleteBackgroundColor = color
+	return i
+}
+
+// SetAutocompleteSelectedTextColor sets the text color of the selected item in
+// the autocomplete list.
+func (i *InputField) SetAutocompleteSelectedTextColor(color tcell.Color) *InputField {
+	i.autocompleteSelectedTextColor = color
+	return i
+}
+
+// SetAutocompleteSelectedBackgroundColor sets the background color of the
+// selected item in the autocomplete list.
+func (i *InputField) SetAutocompleteSelectedBackgroundColor(color tcell.Color) *InputField {
+	i.autocompleteSelectedBackgroundColor = color
 	return i
 }
 
@@ -240,11 +283,11 @@ func (i *InputField) Autocomplete() *InputField {
 	if i.autocompleteList == nil {
 		i.autocompleteList = NewList()
 		i.autocompleteList.ShowSecondaryText(false).
-			SetMainTextColor(Styles.PrimitiveBackgroundColor).
-			SetSelectedTextColor(Styles.PrimitiveBackgroundColor).
-			SetSelectedBackgroundColor(Styles.PrimaryTextColor).
+			SetMainTextColor(i.autocompleteTextColor).
+			SetSelectedTextColor(i.autocompleteSelectedTextColor).
+			SetSelectedBackgroundColor(i.autocompleteSelectedBackgroundColor).
 			SetHighlightFullLine(true).
-			SetBackgroundColor(Styles.MoreContrastBackgroundColor)
+			SetBackgroundColor(i.autocompleteBackgroundColor)
 	}
 
 	// Fill it with the entries.
